@@ -1,22 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
-import { registerAction } from 'src/app/auth/store/actions/register.action';
+import { BackendErrorsInterface } from 'src/app/shared/types/backendErrors.interface';
+import { loginAction } from '../../store/actions/login.action';
 import {
   isSubmittingSelector,
   validationErrorsSelector,
-} from 'src/app/auth/store/selectors';
-import { BackendErrorsInterface } from 'src/app/shared/types/backendErrors.interface';
-import { RegisterRequestInterface } from '../../types/registerRequest.interface';
+} from '../../store/selectors';
+import { LoginRequestInterface } from '../../types/loginRequest.interface';
 
 @Component({
-  selector: 'mc-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss'],
+  selector: 'mc-login',
+  templateUrl: './login.component.html',
 })
-export class RegisterComponent implements OnInit {
+export class LoginComponent implements OnInit {
   form: FormGroup;
   // $ for streams
   isSubmitting$: Observable<boolean>;
@@ -30,7 +28,6 @@ export class RegisterComponent implements OnInit {
 
   initializeForm(): void {
     this.form = this.fb.group({
-      username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
     });
@@ -42,9 +39,9 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit() {
-    const request: RegisterRequestInterface = {
+    const request: LoginRequestInterface = {
       user: this.form.value,
     };
-    this.store.dispatch(registerAction({ request }));
+    this.store.dispatch(loginAction({ request }));
   }
 }
